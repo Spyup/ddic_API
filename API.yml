@@ -1,0 +1,80 @@
+openapi: '3.0.2'
+info:
+  title: API Title
+  version: '1.0'
+servers:
+  - url: http://172.23.2.50:9000
+components:
+  schemas:
+    orderRequestBody:
+      type: object
+      required:
+        - "name"
+        - "phoneNumber"
+        - "orderDateTime"
+        - "numberOfPeople"
+        - "numberOfTable"
+      properties:
+        name:
+          type: string
+        phoneNumber:
+          type: string
+        orderDateTime:
+          type: string
+          format: date-time
+        numberOfPeople:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 12
+        numberOfTable:
+          type: array
+          items:
+            type: integer
+            minimum: 1
+            maximum: 36
+        remark:
+          type: string
+paths:
+  /service/waitter:
+    get:
+      responses:
+        '200':
+          description: OK
+  /service/callWaitter:
+    get:
+      parameters:
+        - name: tables
+          in: query
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+  /tables/status:
+    get:
+      responses:
+        '200':
+          description: OK
+  /tables/order:
+    post:
+      requestBody:
+        content:
+          'application/json':
+            schema:
+             $ref: "#/components/schemas/orderRequestBody"
+      responses:
+        '200':
+          description: OK
+  /tables/orderStatus:
+    get:
+      parameters:
+        - in: query
+          name: tableID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+  
