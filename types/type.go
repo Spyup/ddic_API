@@ -6,16 +6,27 @@ type WaitterStruct struct {
 }
 
 type TableStruct struct {
-	ID          string `json:"ID"`
-	Status      int    `json:"Status"`
-	CleanStatus int    `json:"CleanStatus"`
+	ID          int `json:"ID"`
+	Status      int `json:"Status"`
+	CleanStatus int `json:"CleanStatus"`
 }
 
-type OrderStruct struct {
-	TableID        string `json:"tableID"`
+type OrderStatusStruct struct {
+	TableID        int    `json:"tableID"`
 	OrderName      string `json:"Name"`
 	OrderPhone     string `json:"Phone"`
-	NumberOfPeople string `json:"NumberOfPeople"`
+	NumberOfPeople int    `json:"NumberOfPeople"`
 	OrderDateTime  string `json:"DateTime"`
 	Remark         string `json:"Remark"`
 }
+
+type OrderStruct struct {
+	Name           string `json:"Name"`
+	Phone          string `json:"Phone"`
+	DateTime       string `json:"DateTime"`
+	NumberOfPeople int    `json:"NumberOfPeople"`
+	Table          []int  `json:"table"`
+	Remark         string `json:"Remark"`
+}
+
+type SliceOrderStruct []OrderStruct

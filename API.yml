@@ -15,25 +15,29 @@ components:
         - "numberOfPeople"
         - "numberOfTable"
       properties:
-        name:
+        Name:
           type: string
-        phoneNumber:
+          example: "Jack"
+        Phone:
           type: string
-        orderDateTime:
+          example: "0912345678"
+        DateTime:
           type: string
-          format: date-time
-        numberOfPeople:
+          example: "2023-12-20 18:00:00"
+        NumberOfPeople:
           type: integer
           format: int32
           minimum: 1
           maximum: 12
-        numberOfTable:
+          example: 5
+        Table:
           type: array
           items:
             type: integer
             minimum: 1
             maximum: 36
-        remark:
+          example: [1,2,3,4,5]
+        Remark:
           type: string
 paths:
   /service/waitter:
@@ -74,6 +78,11 @@ paths:
           name: tableID
           schema:
             type: integer
+      responses:
+        '200':
+          description: OK
+  /customer/status:
+    get:
       responses:
         '200':
           description: OK
