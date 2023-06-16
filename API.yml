@@ -39,6 +39,15 @@ components:
           example: [1,2,3,4,5]
         Remark:
           type: string
+    dateSchema:
+      type: string
+      example: "2023-06-16"
+    timeSchema:
+      type: string
+      example: "12:00"
+    numberOfPeople:
+      type: integer
+      example: 2
 paths:
   /service/waitter:
     get:
@@ -83,6 +92,22 @@ paths:
           description: OK
   /customer/status:
     get:
+      responses:
+        '200':
+          description: OK
+  /order/empty:
+    get:
+      parameters:
+        - in: query
+          name: date
+          required: true
+          schema:
+            $ref: "#/components/schemas/dateSchema"
+        - in: query
+          name: NumberOfPeople
+          required: true
+          schema:
+            $ref: "#/components/schemas/numberOfPeople"
       responses:
         '200':
           description: OK

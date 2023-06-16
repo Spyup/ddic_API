@@ -84,13 +84,6 @@ func checkStatus(table []types.TableStruct) gin.HandlerFunc {
 		conn, err := initDB()
 		errPrint(err)
 
-		// now := time.Now()
-		// sub, _ := time.ParseDuration("-1h")
-		// endRange := now.Add(sub)
-		// addition, _ := time.ParseDuration("1h")
-		// startRange := now.Add(addition)
-
-		// rows, err := conn.Query("SELECT * FROM orderQueue WHERE orderDateTime between ? and ?", endRange.Format("2006-01-02 15:03:04"), startRange.Format("2006-01-02 15:03:04"))
 		rows, err := conn.Query("SELECT * FROM orderQueue WHERE orderDateTime between ? and ?", "2023-08-01 00:00:00", "2023-12-31 00:00:00")
 		errPrint(err)
 

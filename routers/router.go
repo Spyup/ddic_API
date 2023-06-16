@@ -2,6 +2,7 @@ package routers
 
 import (
 	customerRouter "ddic/routers/customers"
+	orderRouter "ddic/routers/orders"
 	serviceRouter "ddic/routers/services"
 	tableRouter "ddic/routers/tables"
 
@@ -13,6 +14,7 @@ func InitRouters() *gin.Engine {
 	serviceRouter.LoadServiceRoutes(router)
 	tableRouter.LoadTableRoutes(router)
 	customerRouter.LoadCustomerRoutes(router)
+	orderRouter.LoadOrderRoutes(router)
 
 	return router
 }
