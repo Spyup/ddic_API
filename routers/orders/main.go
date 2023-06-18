@@ -28,7 +28,9 @@ func emptySeat() gin.HandlerFunc {
 		errPrint(err)
 
 		date := context.Query("date")
-		numberOfPeople, _ := strconv.Atoi(context.Query("NumberOfPeople"))
+		aldult, _ := strconv.Atoi(context.Query("aldult"))
+		child, _ := strconv.Atoi(context.Query("child"))
+		sumOfPeople := aldult + child
 
 		emptyTime := make([]string, 0)
 
@@ -42,17 +44,17 @@ func emptySeat() gin.HandlerFunc {
 			var four int
 			var six int
 			rows.Scan(&getTime, &two, &four, &six)
-			if numberOfPeople > 36 {
+			if sumOfPeople > 36 {
 			} else if two < 6 && four < 3 && six < 2 {
 				emptyTime = append(emptyTime, getTime)
-			} else if numberOfPeople <= 2 && two < 6 {
+			} else if sumOfPeople <= 2 && two < 6 {
 				emptyTime = append(emptyTime, getTime)
-			} else if numberOfPeople <= 4 && (four < 3 || two < 5) {
+			} else if sumOfPeople <= 4 && (four < 3 || two < 5) {
 				emptyTime = append(emptyTime, getTime)
-			} else if numberOfPeople <= 6 && ((four < 3 && two < 6) || six < 2) {
+			} else if sumOfPeople <= 6 && ((four < 3 && two < 6) || six < 2) {
 				emptyTime = append(emptyTime, getTime)
 			} else {
-				var needtwo, needfour, needsix = calculateTable(numberOfPeople)
+				var needtwo, needfour, needsix = calculateTable(sumOfPeople)
 				if two+needtwo <= 4 && four+needfour <= 3 && six+needsix <= 2 {
 					emptyTime = append(emptyTime, getTime)
 				}
@@ -65,17 +67,17 @@ func emptySeat() gin.HandlerFunc {
 	}
 }
 
-func calculateTable(numberOfPeople int) (int, int, int) {
-	var six = numberOfPeople / 6
-	numberOfPeople = numberOfPeople % 6
+func calculateTable(sumOfPeople int) (int, int, int) {
+	var six = sumOfPeople / 6
+	sumOfPeople = sumOfPeople % 6
 
-	var four = numberOfPeople / 4
-	numberOfPeople = numberOfPeople % 4
+	var four = sumOfPeople / 4
+	sumOfPeople = sumOfPeople % 4
 
-	var two = numberOfPeople / 2
-	numberOfPeople = numberOfPeople % 4
+	var two = sumOfPeople / 2
+	sumOfPeople = sumOfPeople % 4
 
-	_ = numberOfPeople
+	_ = sumOfPeople
 
 	return two, four, six
 }

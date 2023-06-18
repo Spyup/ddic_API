@@ -21,15 +21,27 @@ components:
         Phone:
           type: string
           example: "0912345678"
-        DateTime:
+        Gender:
+          type: integer
+          example: 0
+        Date:
           type: string
-          example: "2023-12-20 18:00:00"
-        NumberOfPeople:
+          example: "2023-12-20"
+        Time:
+          type: string
+          example: "18:00"
+        Aldult:
           type: integer
           format: int32
           minimum: 1
           maximum: 12
           example: 5
+        Child:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 12
+          example: 0
         Table:
           type: array
           items:
@@ -45,9 +57,16 @@ components:
     timeSchema:
       type: string
       example: "12:00"
-    numberOfPeople:
+    aldult:
       type: integer
       example: 2
+    child:
+      type: integer
+      example: 0
+    table:
+      type: integer
+      format: int32
+      example: 1
 paths:
   /service/waitter:
     get:
@@ -60,8 +79,7 @@ paths:
         - name: tables
           in: query
           schema:
-            type: integer
-            format: int32
+            $ref: "#/components/schemas/table"
       responses:
         '200':
           description: OK
@@ -84,9 +102,9 @@ paths:
     get:
       parameters:
         - in: query
-          name: tableID
+          name: table
           schema:
-            type: integer
+            $ref: "#/components/schemas/table"
       responses:
         '200':
           description: OK
@@ -104,10 +122,15 @@ paths:
           schema:
             $ref: "#/components/schemas/dateSchema"
         - in: query
-          name: NumberOfPeople
+          name: aldult
           required: true
           schema:
-            $ref: "#/components/schemas/numberOfPeople"
+            $ref: "#/components/schemas/aldult"
+        - in: query
+          name: child
+          required: true
+          schema:
+            $ref: "#/components/schemas/child"
       responses:
         '200':
           description: OK

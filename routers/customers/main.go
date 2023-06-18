@@ -21,10 +21,10 @@ func initDB() (*sql.DB, error) {
 	return db, err
 }
 
-func sliceSearch(s []types.OrderStruct, Phone string, DateTime string) bool {
+func sliceSearch(s []types.OrderStruct, Phone string, Date string, Time string) bool {
 
 	for _, value := range s {
-		if value.Phone == Phone && value.DateTime == DateTime {
+		if value.Phone == Phone && value.Date == Date && value.Time == Time {
 			return true
 		}
 	}
@@ -40,9 +40,9 @@ func searchTable(s []int, ID int) bool {
 	return true
 }
 
-func sliceInsert(s *[]types.OrderStruct, Phone string, DateTime string, Table int) bool {
+func sliceInsert(s *[]types.OrderStruct, Phone string, Date string, Time string, Table int) bool {
 	for i, value := range *s {
-		if value.Phone == Phone && value.DateTime == DateTime && searchTable(value.Table, Table) {
+		if value.Phone == Phone && value.Date == Date && value.Time == Time && searchTable(value.Table, Table) {
 			value.Table = append(value.Table, Table)
 			(*s)[i].Table = value.Table
 			return true
@@ -63,21 +63,24 @@ func checkStatus() gin.HandlerFunc {
 
 		for rows.Next() {
 			var id int
-			var tableID int
+			var table int
 			var name string
+			var gender int
 			var phone string
-			var numberOfPeople int
-			var dateTime string
+			var aldult int
+			var child int
+			var date string
+			var time string
 			var remark string
-			err = rows.Scan(&id, &tableID, &name, &phone, &numberOfPeople, &dateTime, &remark)
+			err = rows.Scan(&id, &table, &name, &gender, &phone, &aldult, &child, &date, &time, &remark)
 			errPrint(err)
 
-			if len(store) == 0 || !sliceSearch(store, phone, dateTime) {
+			if len(store) == 0 || !sliceSearch(store, phone, date, time) {
 				var tableSlice = make([]int, 0)
-				tableSlice = append(tableSlice, tableID)
-				store = append(store, types.OrderStruct{Name: name, Phone: phone, NumberOfPeople: numberOfPeople, Table: tableSlice, DateTime: dateTime, Remark: remark})
+				tableSlice = append(tableSlice, table)
+				store = append(store, types.OrderStruct{Name: name, Phone: phone, Gender: gender, Aldult: aldult, Child: child, Table: tableSlice, Date: date, Time: time, Remark: remark})
 			} else {
-				sliceInsert(&store, phone, dateTime, tableID)
+				sliceInsert(&store, phone, date, time, table)
 			}
 
 		}

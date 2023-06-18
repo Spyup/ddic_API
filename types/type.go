@@ -12,21 +12,27 @@ type TableStruct struct {
 }
 
 type OrderStatusStruct struct {
-	TableID        int    `json:"tableID"`
-	OrderName      string `json:"Name"`
-	OrderPhone     string `json:"Phone"`
-	NumberOfPeople int    `json:"NumberOfPeople"`
-	OrderDateTime  string `json:"DateTime"`
-	Remark         string `json:"Remark"`
+	TableID int    `json:"tableID"`
+	Name    string `json:"Name"`
+	Gender  int    `json:"Gender"`
+	Phone   string `json:"Phone"`
+	Aldult  int    `json:"Aldult"`
+	Child   int    `json:"Child"`
+	Date    string `json:"Date"`
+	Time    string `json:"Time"`
+	Remark  string `json:"Remark"`
 }
 
 type OrderStruct struct {
-	Name           string `json:"Name"`
-	Phone          string `json:"Phone"`
-	DateTime       string `json:"DateTime"`
-	NumberOfPeople int    `json:"NumberOfPeople"`
-	Table          []int  `json:"table"`
-	Remark         string `json:"Remark"`
+	Name   string `json:"Name"`
+	Phone  string `json:"Phone"`
+	Gender int    `json:"Gender"`
+	Date   string `json:"Date"`
+	Time   string `json:"Time"`
+	Aldult int    `json:"Aldult"`
+	Child  int    `json:"Child"`
+	Table  []int  `json:"Table"`
+	Remark string `json:"Remark"`
 }
 
 type SliceOrderStruct []OrderStruct
