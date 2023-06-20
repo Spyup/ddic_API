@@ -9,10 +9,13 @@ components:
     orderRequestBody:
       type: object
       required:
-        - "name"
-        - "phoneNumber"
-        - "orderDateTime"
-        - "numberOfPeople"
+        - "Name"
+        - "Phone"
+        - "Gender"
+        - "Date"
+        - "Time"
+        - "Aldult"
+        - "Child"
         - "numberOfTable"
       properties:
         Name:
@@ -67,6 +70,36 @@ components:
       type: integer
       format: int32
       example: 1
+    notifyRequestBody:
+      type: object
+      required:
+        - "Name"
+        - "Gender"
+        - "Phone"
+        - "Date"
+        - "Time"
+        - "Notify"
+      properties:
+        Name:
+         type: string
+         example: "Jack"
+        Gender:
+         type: integer
+         format: int64
+         example: 1
+        Phone:
+         type: string
+         example: "0912345678"
+        Date:
+         type: string
+         example: "2023-10-20"
+        Time:
+         type: string
+         example: "18:00"
+        Notify:
+         type: integer
+         format: int32
+         example: 1
 paths:
   /service/waitter:
     get:
@@ -134,4 +167,25 @@ paths:
       responses:
         '200':
           description: OK
-  
+  /order/status:
+    get:
+      parameters:
+        - in: query
+          name: date
+          required: false
+          schema:
+            $ref: "#/components/schemas/dateSchema"
+      responses:
+        '200':
+          description: OK
+  /order/notify:
+    post:
+      requestBody:
+        content:
+          'application/json':
+            schema:
+             $ref: "#/components/schemas/notifyRequestBody"
+      responses:
+        '200':
+          description: OK
+

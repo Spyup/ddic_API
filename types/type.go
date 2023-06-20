@@ -33,6 +33,14 @@ type OrderStruct struct {
 	Child  int    `json:"Child"`
 	Table  []int  `json:"Table"`
 	Remark string `json:"Remark"`
+	Notify int    `json:"Notify"`
 }
 
-type SliceOrderStruct []OrderStruct
+type CustomerStruct struct {
+	Name   string `json:"Name"`
+	Phone  string `json:"Phone"`
+	Gender int    `json:"Gender"`
+	Date   string `json:"Date"`
+	Time   string `json:"Time"`
+	Notify int    `json:"Notify"`
+}

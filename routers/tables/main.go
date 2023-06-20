@@ -131,7 +131,7 @@ func getOrderStatus() gin.HandlerFunc {
 		table := context.Query("tableID")
 		currentTime := time.Now()
 
-		rows, err := conn.Query("SELECT * FROM orderQueue WHERE tableID=? AND orderDateTime like ?", table, "%"+currentTime.Format("2006-1-2")+"%")
+		rows, err := conn.Query("SELECT * FROM orderQueue WHERE tableID=? AND orderDateTime like ?", table, "%"+currentTime.Format("2006-01-02")+"%")
 		errPrint(err)
 
 		OrderStatus := make([]types.OrderStatusStruct, 0)
@@ -166,7 +166,7 @@ func orderSeat() gin.HandlerFunc {
 		conn, err := initDB()
 		errPrint(err)
 
-		stmt, err := conn.Prepare("INSERT INTO orderQueue(tableID, name, gender, phone, aldult, child, date, time, remark) values(?, ?, ?, ?, ?, ?, ?, ?, ?)")
+		stmt, err := conn.Prepare("INSERT INTO orderQueue(tableID, name, gender, phone, aldult, child, date, time, notify, remark) values(?, ?, ?, ?, ?, ?, ?, ?, 0, ?)")
 		errPrint(err)
 
 		for _, value := range order.Table {

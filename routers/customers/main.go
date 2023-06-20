@@ -72,13 +72,14 @@ func checkStatus() gin.HandlerFunc {
 			var date string
 			var time string
 			var remark string
-			err = rows.Scan(&id, &table, &name, &gender, &phone, &aldult, &child, &date, &time, &remark)
+			var notify int
+			err = rows.Scan(&id, &table, &name, &gender, &phone, &aldult, &child, &date, &time, &remark, &notify)
 			errPrint(err)
 
 			if len(store) == 0 || !sliceSearch(store, phone, date, time) {
 				var tableSlice = make([]int, 0)
 				tableSlice = append(tableSlice, table)
-				store = append(store, types.OrderStruct{Name: name, Phone: phone, Gender: gender, Aldult: aldult, Child: child, Table: tableSlice, Date: date, Time: time, Remark: remark})
+				store = append(store, types.OrderStruct{Name: name, Phone: phone, Gender: gender, Aldult: aldult, Child: child, Table: tableSlice, Date: date, Time: time, Remark: remark, Notify: notify})
 			} else {
 				sliceInsert(&store, phone, date, time, table)
 			}
