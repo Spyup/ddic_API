@@ -6,9 +6,9 @@ type WaitterStruct struct {
 }
 
 type TableStruct struct {
-	ID          int `json:"ID"`
-	Status      int `json:"Status"`
-	CleanStatus int `json:"CleanStatus"`
+	ID    int `json:"ID"`
+	Used  int `json:"Used"`
+	Clean int `json:"Clean"`
 }
 
 type OrderStatusStruct struct {
@@ -37,10 +37,21 @@ type OrderStruct struct {
 }
 
 type CustomerStruct struct {
+	Name   string `json:"Name" form:"Name"`
+	Phone  string `json:"Phone" form:"Phone"`
+	Gender int    `json:"Gender" form:"Gender"`
+	Date   string `json:"Date" form:"Date"`
+	Time   string `json:"Time" form:"Time"`
+	Notify int    `json:"Notify" form:"Notify"`
+}
+
+type CustomerLiveStruct struct {
 	Name   string `json:"Name"`
-	Phone  string `json:"Phone"`
-	Gender int    `json:"Gender"`
-	Date   string `json:"Date"`
-	Time   string `json:"Time"`
-	Notify int    `json:"Notify"`
+	Aldult int    `json:"Aldult"`
+	Child  int    `json:"Child"`
+	Table  []int  `json:"Table"`
+}
+
+type PostCustomerStruct struct {
+	Data []CustomerStruct `form:"data" json:"data"`
 }

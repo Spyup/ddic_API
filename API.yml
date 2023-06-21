@@ -108,36 +108,11 @@ paths:
           description: OK
   /service/callWaitter:
     get:
-      parameters:
-        - name: tables
-          in: query
-          schema:
-            $ref: "#/components/schemas/table"
       responses:
         '200':
           description: OK
   /tables/status:
     get:
-      responses:
-        '200':
-          description: OK
-  /tables/order:
-    post:
-      requestBody:
-        content:
-          'application/json':
-            schema:
-             $ref: "#/components/schemas/orderRequestBody"
-      responses:
-        '200':
-          description: OK
-  /tables/orderStatus:
-    get:
-      parameters:
-        - in: query
-          name: table
-          schema:
-            $ref: "#/components/schemas/table"
       responses:
         '200':
           description: OK
@@ -178,6 +153,16 @@ paths:
       responses:
         '200':
           description: OK
+  /order/seat:
+    post:
+      requestBody:
+        content:
+          'application/json':
+            schema:
+             $ref: "#/components/schemas/orderRequestBody"
+      responses:
+        '200':
+          description: OK
   /order/notify:
     post:
       requestBody:
@@ -188,4 +173,3 @@ paths:
       responses:
         '200':
           description: OK
-

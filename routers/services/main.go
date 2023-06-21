@@ -2,7 +2,6 @@ package services
 
 import (
 	types "ddic/types"
-	"fmt"
 	"math/rand"
 	"strconv"
 	"time"
@@ -45,7 +44,8 @@ func createCRON(waitterList []types.WaitterStruct) {
 func getWaitterMinDis(waitterList []types.WaitterStruct) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var minDisWaitter types.WaitterStruct
-		cutomerTable := c.Query("tables")
+		rand.Seed(time.Now().UnixNano())
+		customerTable := rand.Intn(8)
 
 		minDisWaitter.Name = waitterList[0].Name
 		minDisWaitter.Distance = waitterList[0].Distance
@@ -56,10 +56,10 @@ func getWaitterMinDis(waitterList []types.WaitterStruct) gin.HandlerFunc {
 				minDisWaitter.Distance = waitterList[i].Distance
 			}
 		}
-		fmt.Println("cutomerTable", cutomerTable)
-		fmt.Println("minDisWaitter", minDisWaitter)
 
-		c.JSON(200, gin.H{"Cutomer": cutomerTable, "Waitter": minDisWaitter})
+		response := gin.H{"Customer": customerTable, "Waitter": minDisWaitter}
+
+		c.JSON(200, gin.H{"status": response})
 	}
 }
 

@@ -97,7 +97,7 @@ func getStatus() gin.HandlerFunc {
 		conn, err := initDB()
 		errPrint(err)
 
-		rows, err := conn.Query("SELECT Name,Phone,Gender,Date,Time,Notify FROM orderQueue WHERE date>='" + date + "' AND notify<2;")
+		rows, err := conn.Query("SELECT Name,Phone,Gender,Date,Time,Notify FROM orderQueue WHERE date>='" + date + "' AND notify<2")
 		errPrint(err)
 
 		customer := make([]types.CustomerStruct, 0)
@@ -120,29 +120,98 @@ func getStatus() gin.HandlerFunc {
 
 func updateNotify() gin.HandlerFunc {
 	return func(context *gin.Context) {
-		var customer types.CustomerStruct
+		var formCustomer types.PostCustomerStruct
+		var customer []types.CustomerStruct
 		var conn *sql.DB
 		var stmt *sql.Stmt
 		var err error
 
-		err = context.BindJSON(&customer)
+		err = context.ShouldBind(&formCustomer)
 		errPrint(err)
 
-		conn, err = initDB()
-		errPrint(err)
+		customer = formCustomer.Data
 
-		if customer.Notify == 1 {
-			stmt, err = conn.Prepare("UPDATE `orderQueue` set notify=1 where name=? and gender=? and phone=? and date=? and time=?;")
-		} else {
-			stmt, err = conn.Prepare("UPDATE `orderQueue` set notify=2 where name=? and gender=? and phone=? and date=? and time=?;")
+		for i := 0; i < len(customer); i++ {
+			conn, err = initDB()
+			errPrint(err)
+
+			if customer[i].Notify == 1 {
+				stmt, err = conn.Prepare("UPDATE `orderQueue` set notify=1 where name=? and gender=? and phone=? and date=? and time=?;")
+			} else {
+				stmt, err = conn.Prepare("UPDATE `orderQueue` set notify=2 where name=? and gender=? and phone=? and date=? and time=?;")
+			}
+			errPrint(err)
+
+			res, err := stmt.Exec(customer[i].Name, customer[i].Gender, customer[i].Phone, customer[i].Date, customer[i].Time)
+			errPrint(err)
+			_ = res
+
+			conn.Close()
 		}
+
+		context.JSON(200, "succes")
+	}
+}
+
+func orderSeat() gin.HandlerFunc {
+	return func(context *gin.Context) {
+		var order types.OrderStruct
+		var id int64
+		var err error
+
+		err = context.BindJSON(&order)
 		errPrint(err)
 
-		res, err := stmt.Exec(customer.Name, customer.Gender, customer.Phone, customer.Date, customer.Time)
+		conn, err := initDB()
 		errPrint(err)
-		_ = res
 
-		context.JSON(200, "success")
+		stmt, err := conn.Prepare("INSERT INTO orderQueue(tableID, name, gender, phone, aldult, child, date, time, notify, remark) values(?, ?, ?, ?, ?, ?, ?, ?, 0, ?)")
+		errPrint(err)
+
+		for _, value := range order.Table {
+			res, err := stmt.Exec(value, order.Name, order.Gender, order.Phone, order.Aldult, order.Child, order.Date, order.Time, order.Remark)
+			errPrint(err)
+
+			id, err = res.LastInsertId()
+			errPrint(err)
+
+			fmt.Println("Last ID: ", strconv.Itoa(int(id)))
+		}
+		conn.Close()
+
+		context.JSON(200, gin.H{"序號:": strconv.Itoa(int(id))})
+	}
+}
+
+func orderFromLive() gin.HandlerFunc {
+	return func(context *gin.Context) {
+		var order types.CustomerLiveStruct
+		var id int64
+		var err error
+
+		date := time.Now().Format("2006-01-02")
+		hour, minute, second := time.Now().Clock()
+		times := strconv.Itoa(hour) + ":" + strconv.Itoa(minute) + ":" + strconv.Itoa(second)
+
+		err = context.BindJSON(&order)
+		errPrint(err)
+
+		conn, err := initDB()
+		errPrint(err)
+
+		stmt, err := conn.Prepare("INSERT INTO orderQueue(tableID, name, gender, phone, aldult, child, date, time, notify, remark) values(?, ?, ?, ?, ?, ?, ?, ?, 0, ?)")
+		errPrint(err)
+
+		for _, value := range order.Table {
+			res, err := stmt.Exec(value, order.Name, "2", "0900000000", order.Aldult, order.Child, date, times, "")
+			errPrint(err)
+
+			id, err = res.LastInsertId()
+			errPrint(err)
+		}
+		conn.Close()
+
+		context.JSON(200, gin.H{"序號:": strconv.Itoa(int(id))})
 	}
 }
 
@@ -152,6 +221,8 @@ func LoadOrderRoutes(e *gin.Engine) {
 	{
 		orderRoute.GET("/empty", emptySeat())
 		orderRoute.GET("/status", getStatus())
+		orderRoute.POST("/seat", orderSeat())
+		orderRoute.POST("/live", orderFromLive())
 		orderRoute.POST("/notify", updateNotify())
 	}
 }
